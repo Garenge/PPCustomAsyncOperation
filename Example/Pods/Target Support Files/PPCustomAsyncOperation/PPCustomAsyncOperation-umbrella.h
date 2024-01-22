@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "PPCustomAsyncOperation.h"
+#import "PPCustomOperationQueue.h"
 
 FOUNDATION_EXPORT double PPCustomAsyncOperationVersionNumber;
 FOUNDATION_EXPORT const unsigned char PPCustomAsyncOperationVersionString[];
