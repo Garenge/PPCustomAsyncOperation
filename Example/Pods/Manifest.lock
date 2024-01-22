@@ -1,0 +1,16 @@
+PODS:
+  - PPCustomAsyncOperation (0.1.0)
+
+DEPENDENCIES:
+  - PPCustomAsyncOperation (from `../`)
+
+EXTERNAL SOURCES:
+  PPCustomAsyncOperation:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  PPCustomAsyncOperation: f6c27736c7ac38b477168e4b12989c53bd1d1cce
+
+PODFILE CHECKSUM: e3f05e0f6272662dd35d2a763b18af2819466383
+
+COCOAPODS: 1.14.3
