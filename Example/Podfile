@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '10.0'
+
+target 'PPCustomAsyncOperation_Example' do
+  pod 'PPCustomAsyncOperation', :path => '../'
+
+  target 'PPCustomAsyncOperation_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
