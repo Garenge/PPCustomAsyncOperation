@@ -14,6 +14,10 @@
 @property(nonatomic, assign) BOOL operationExecuting;
 @property(nonatomic, assign) BOOL operationFinished;
 
+/// 超时的计数器, 步长为1
+@property (nonatomic, assign) NSTimeInterval timeoutCount;
+@property (nonatomic, strong, nullable) NSTimer *timeoutTimer;
+
 @end
 
 @implementation PPCustomAsyncOperation
@@ -42,9 +46,39 @@
         }
 
         if (self.mainOperationDoBlock(self)) {
+            NSLog(@"======== %@, identifier: %@ 同步任务已完成", NSStringFromClass([self class]), self.identifier);
             [self finishOperation];
+        } else {
+            // 判断超时
+            if (self.timeoutInterval <= 0) {
+                NSLog(@"======== %@, identifier: %@ 异步任务已启动, 未设置超时检测", NSStringFromClass([self class]), self.identifier);
+                return;
+            }
+
+            NSLog(@"======== %@, identifier: %@ 异步任务已启动, 开启超时检测: %.0f", NSStringFromClass([self class]), self.identifier, self.timeoutInterval);
+
+            [self.timeoutTimer invalidate];
+            self.timeoutCount = 0;
+            self.timeoutTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(timeoutTimerAction:) userInfo:nil repeats:YES];
+            [[NSRunLoop mainRunLoop] addTimer:self.timeoutTimer forMode:NSRunLoopCommonModes];
         }
     }
+}
+
+- (void)timeoutTimerAction:(NSTimer *)timer {
+    self.timeoutCount += 1;
+    if (self.timeoutCount >= self.timeoutInterval) {
+        NSLog(@"======== %@, identifier: %@ 已超时, 即将自动结束", NSStringFromClass([self class]), self.identifier);
+        [self finishOperation];
+    } else {
+        NSLog(@"======== %@, identifier: %@ 计时中: %.0f", NSStringFromClass([self class]), self.identifier, self.timeoutCount);
+    }
+}
+
+- (void)releaseTimer {
+    self.timeoutCount = 0;
+    [self.timeoutTimer invalidate];
+    self.timeoutTimer = nil;
 }
 
 - (BOOL)isConcurrent {
@@ -69,7 +103,7 @@
     @synchronized (self) {
         [super cancel];
 
-
+        [self releaseTimer];
         if ([self isExecuting]) {
             [self finishOperation];
         }
@@ -80,12 +114,15 @@
 
 - (void)finishOperation {
     @synchronized (self) {
+        [self releaseTimer];
         if (!self.operationExecuting && self.operationFinished) {
             return;
         }
 
         if (_hasStart) {
             [self signKVOComplete];
+        } else {
+            [self cancel];
         }
     }
 }

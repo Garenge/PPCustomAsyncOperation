@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PPCustomOperationQueue : NSOperationQueue
 
+- (void)addOperationWithIdentifier:(NSString *)identifier operationMainBlock:(PPCustomAsyncOperationMainBlock)block;
+
 @property (nonatomic, copy) void(^didFinishedOperationsBlock)(PPCustomOperationQueue *queue);
 
 @end

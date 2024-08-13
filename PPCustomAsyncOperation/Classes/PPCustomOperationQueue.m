@@ -16,6 +16,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
+        self.maxConcurrentOperationCount = 1;
         [self addObserver:self forKeyPath:@"operationCount" options:NSKeyValueObservingOptionNew context:nil];
     }
     return self;
@@ -32,6 +33,13 @@
             }
         }
     }
+}
+
+- (void)addOperationWithIdentifier:(NSString *)identifier operationMainBlock:(PPCustomAsyncOperationMainBlock)block {
+    PPCustomAsyncOperation *operation = [[PPCustomAsyncOperation alloc] init];
+    operation.identifier = identifier;
+    operation.mainOperationDoBlock = block;
+    [self addOperation:operation];
 }
 
 @end
