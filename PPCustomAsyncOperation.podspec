@@ -8,25 +8,17 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PPCustomAsyncOperation'
-  s.version          = '0.1.2'
-  s.summary          = 'A short description of PPCustomAsyncOperation.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+  s.version          = '0.1.3'
+  s.summary          = 'Easy way to run async tasks in queue with PPCustomAsyncOperation.'
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Add timeout block.
                        DESC
 
   s.homepage         = 'https://github.com/Garenge/PPCustomAsyncOperation'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'pengpeng' => 'garenge@outlook.com' }
   s.source           = { :git => 'https://github.com/Garenge/PPCustomAsyncOperation.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '10.0'
 
@@ -39,12 +31,6 @@ TODO: Add long description of the pod here.
   }
 
   s.source_files = 'PPCustomAsyncOperation/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'PPCustomAsyncOperation' => ['PPCustomAsyncOperation/Assets/*.png']
-  # }
 
   s.public_header_files = 'PPCustomAsyncOperation/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end
