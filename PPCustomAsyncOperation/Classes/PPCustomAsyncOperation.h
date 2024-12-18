@@ -9,20 +9,25 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class PPCustomAsyncOperation;
+
 typedef BOOL(^PPCustomAsyncOperationMainBlock)(PPCustomAsyncOperation *operation);
+typedef void(^PPCustomAsyncOperationTimeoutBlock)(PPCustomAsyncOperation *operation);
+
 @interface PPCustomAsyncOperation : NSOperation
 
 @property (nonatomic, strong) NSString *identifier;
 
 /// 任务超时自动结束, 步长为1, 默认 为0或者负数, 如果设置>0, 那么该时长后, 任务自动结束
 @property (nonatomic, assign) NSTimeInterval timeoutInterval;
-
-/// 手动结束任务
-- (void)finishOperation;
+/// 超时结束任务之前的回调
+@property (nonatomic, copy) PPCustomAsyncOperationTimeoutBlock timeoutBlock;
 
 /// what you do in operation. You must call - (void)finishOperation to finish the operation if return NO.
 /// "No" for async, "YES" for sync.
 @property (nonatomic, copy) PPCustomAsyncOperationMainBlock mainOperationDoBlock;
+
+/// 手动结束任务
+- (void)finishOperation;
 
 @end
 

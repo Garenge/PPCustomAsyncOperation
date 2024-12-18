@@ -26,6 +26,7 @@
 
 - (void)start {
     _hasStart = YES;
+    NSLog(@"======== %@, identifier: %@ start", NSStringFromClass([self class]), self.identifier);
     if ([self isCancelled]) {
         [self signKVOComplete];
         return;
@@ -69,6 +70,9 @@
     self.timeoutCount += 1;
     if (self.timeoutCount >= self.timeoutInterval) {
         NSLog(@"======== %@, identifier: %@ 已超时, 即将自动结束", NSStringFromClass([self class]), self.identifier);
+        if (self.timeoutBlock) {
+            self.timeoutBlock(self);
+        }
         [self finishOperation];
     } else {
         NSLog(@"======== %@, identifier: %@ 计时中: %.0f", NSStringFromClass([self class]), self.identifier, self.timeoutCount);
@@ -87,14 +91,14 @@
 
 - (BOOL)isExecuting {
     if (self.operationExecuting) {
-        NSLog(@"---------%@ Start---------", NSStringFromClass([self class]));
+        NSLog(@"======== %@, identifier: %@ isExecuting", NSStringFromClass([self class]), self.identifier);
     }
     return self.operationExecuting;
 }
 
 - (BOOL)isFinished {
     if (self.operationFinished) {
-        NSLog(@"---------%@ End---------", NSStringFromClass([self class]));
+        NSLog(@"======== %@, identifier: %@ isFinished", NSStringFromClass([self class]), self.identifier);
     }
     return self.operationFinished;
 }
@@ -139,7 +143,7 @@
 }
 
 - (void)dealloc {
-    NSLog(@"===== %@ dealloc; identifier: %@ ======", NSStringFromClass([self class]), self.identifier);
+    NSLog(@"======== %@ dealloc; identifier: %@ ======", NSStringFromClass([self class]), self.identifier);
 }
 
 @end
