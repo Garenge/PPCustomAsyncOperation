@@ -14,6 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addOperationWithIdentifier:(NSString *)identifier operationMainBlock:(PPCustomAsyncOperationMainBlock)block;
 
+/// 便捷添加：带超时
+- (PPCustomAsyncOperation *)addOperationWithIdentifier:(NSString *)identifier
+                                     timeoutInterval:(NSTimeInterval)timeoutInterval
+                                          mainBlock:(PPCustomAsyncOperationMainBlock)block;
+
+/// 根据 identifier 查找/取消
+- (nullable PPCustomAsyncOperation *)operationForIdentifier:(NSString *)identifier;
+- (BOOL)cancelOperationForIdentifier:(NSString *)identifier;
+
+/// 暂停与恢复队列
+- (void)pause;
+- (void)resume;
+
 @property (nonatomic, copy) void(^didFinishedOperationsBlock)(PPCustomOperationQueue *queue);
 
 @end

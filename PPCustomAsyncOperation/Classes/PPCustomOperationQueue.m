@@ -10,7 +10,11 @@
 @implementation PPCustomOperationQueue
 
 - (void)dealloc {
-    [self removeObserver:self forKeyPath:@"operationCount"];
+    @try {
+        [self removeObserver:self forKeyPath:@"operationCount"];
+    } @catch (__unused NSException *exception) {
+        // ignore if not registered
+    }
     NSLog(@"PPCustomOperationQueue dealloc");
 }
 
@@ -40,6 +44,43 @@
     operation.identifier = identifier;
     operation.mainOperationDoBlock = block;
     [self addOperation:operation];
+}
+
+- (PPCustomAsyncOperation *)addOperationWithIdentifier:(NSString *)identifier
+                                     timeoutInterval:(NSTimeInterval)timeoutInterval
+                                          mainBlock:(PPCustomAsyncOperationMainBlock)block {
+    PPCustomAsyncOperation *operation = [[PPCustomAsyncOperation alloc] initWithIdentifier:identifier
+                                                                         timeoutInterval:timeoutInterval
+                                                                               mainBlock:block];
+    [self addOperation:operation];
+    return operation;
+}
+
+- (nullable PPCustomAsyncOperation *)operationForIdentifier:(NSString *)identifier {
+    if (identifier.length == 0) { return nil; }
+    for (NSOperation *op in self.operations) {
+        if (![op isKindOfClass:[PPCustomAsyncOperation class]]) { continue; }
+        PPCustomAsyncOperation *aop = (PPCustomAsyncOperation *)op;
+        if ([aop.identifier isEqualToString:identifier]) {
+            return aop;
+        }
+    }
+    return nil;
+}
+
+- (BOOL)cancelOperationForIdentifier:(NSString *)identifier {
+    PPCustomAsyncOperation *op = [self operationForIdentifier:identifier];
+    if (!op) { return NO; }
+    [op cancel];
+    return YES;
+}
+
+- (void)pause {
+    self.suspended = YES;
+}
+
+- (void)resume {
+    self.suspended = NO;
 }
 
 @end
