@@ -8,11 +8,11 @@
 
 Pod::Spec.new do |s|
   s.name             = 'PPCustomAsyncOperation'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = 'Easy way to run async tasks in queue with PPCustomAsyncOperation.'
 
   s.description      = <<-DESC
-Add timeout block.
+Async operation with timeout, finish callbacks and queue helpers.
                        DESC
 
   s.homepage         = 'https://github.com/Garenge/PPCustomAsyncOperation'
